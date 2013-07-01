@@ -2,6 +2,11 @@
 	"name" : "keeko/composer-installer",
 	"description" : "Keeko component installer",
 	"type" : "composer-installer",
+	"authors" : [{
+			"name" : "gossi",
+			"homepage" : "gos.si"
+		}
+	],
 	"keywords" : [],
 	"license" : [
 		"MIT"
