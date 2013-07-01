@@ -4,7 +4,7 @@ namespace keeko\composer;
 
 use Composer\Package\PackageInterface;
 
-class UnifiedAssetInstaller extends \Composer\Installer\LibraryInstaller {
+class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 	
 	private $types = array (
 		'keeko-core',
