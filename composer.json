@@ -13,5 +13,8 @@
 		"psr-0" : {
 			"keeko" : "src"
 		}
+	},
+	"extra" : {
+		"class" : "\\keeko\\composer\\KeekoComposerInstaller"
 	}
 }
