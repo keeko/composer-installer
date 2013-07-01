@@ -16,7 +16,7 @@
 	},
 	"autoload" : {
 		"psr-0" : {
-			"keeko" : "src"
+			"keeko\\composer" : "src"
 		}
 	},
 	"extra" : {

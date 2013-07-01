@@ -7,9 +7,9 @@ use Composer\Package\PackageInterface;
 class UnifiedAssetInstaller extends \Composer\Installer\LibraryInstaller {
 	
 	private $types = array (
-			'keeko-core',
-			'keeko-app',
-			'keeko-module' 
+		'keeko-core',
+		'keeko-app',
+		'keeko-module' 
 	);
 	
 	/**
