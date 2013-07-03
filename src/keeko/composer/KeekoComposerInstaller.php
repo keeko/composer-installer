@@ -51,7 +51,7 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 		if ($local !== null) {
 			$path = $local . DIRECTORY_SEPARATOR . $package->getName();
 			if (!$this->filesystem->isAbsolutePath($path)) {
-				$path = $this->filesystem->normalizePath(__DIR__ . '/' . $path);
+				$path = $this->filesystem->normalizePath(getcwd() . '/' . $path);
 			}
 			
 			if (file_exists($path)) {
