@@ -15,8 +15,6 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 		'keeko-module' 
 	);
 	
-	protected $symFilesystem;
-	
 	public function __construct(IOInterface $io, Composer $composer, $type = 'library') {
 		parent::__construct($io, $composer, $type);
 	}
@@ -122,10 +120,10 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 	 * @param string $targetDir The symbolic link name
 	 * @param Boolean $copyOnWindows Whether to copy files if on Windows
 	 *
-	 * @throws IOException When symlink fails
+	 * @throws \Exception When symlink fails
 	 */
 	private function symlink($originDir, $targetDir) {
-		@mkdir($dir, dirname($targetDir), 0777, true);
+		@mkdir(dirname($targetDir), 0777, true);
 	
 		$ok = false;
 		if (is_link($targetDir)) {
