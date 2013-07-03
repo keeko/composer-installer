@@ -55,7 +55,7 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 			
 			if (file_exists($path)) {
 				try {
-					$this->symFilesystem->symlink($path, $this->getInstallPath($package));
+					$this->symlink($path, $this->getInstallPath($package));
 					$installed = true;
 				} catch(IOException $e) {
 					$installed = false;
