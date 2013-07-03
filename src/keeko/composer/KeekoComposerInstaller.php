@@ -4,8 +4,6 @@ namespace keeko\composer;
 
 use Composer\Package\PackageInterface;
 use Composer\Repository\InstalledRepositoryInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOException;
 use Composer\IO\IOInterface;
 use Composer\Composer;
 
@@ -21,8 +19,6 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 	
 	public function __construct(IOInterface $io, Composer $composer, $type = 'library') {
 		parent::__construct($io, $composer, $type);
-		
-		$this->symFilesystem = new Filesystem();
 	}
 	
 	/**
@@ -113,5 +109,43 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 	 */
 	public function supports($packageType) {
 		return (bool) in_array($packageType, $this->types);
+	}
+	
+	
+
+	/**
+	 * A lightweight method of the symlink method in Symfony\Filesystem
+	 * 
+	 * Creates a symbolic link or copy a directory.
+	 *
+	 * @param string $originDir The origin directory path
+	 * @param string $targetDir The symbolic link name
+	 * @param Boolean $copyOnWindows Whether to copy files if on Windows
+	 *
+	 * @throws IOException When symlink fails
+	 */
+	private function symlink($originDir, $targetDir) {
+		@mkdir($dir, dirname($targetDir), 0777, true);
+	
+		$ok = false;
+		if (is_link($targetDir)) {
+			if (readlink($targetDir) != $originDir) {
+				$this->filesystem->remove($targetDir);
+			} else {
+				$ok = true;
+			}
+		}
+	
+		if (!$ok) {
+			if (true !== @symlink($originDir, $targetDir)) {
+				$report = error_get_last();
+				if (is_array($report)) {
+					if (defined('PHP_WINDOWS_VERSION_MAJOR') && false !== strpos($report['message'], 'error code(1314)')) {
+						throw new \Exception('Unable to create symlink due to error code 1314: \'A required privilege is not held by the client\'. Do you have the required Administrator-rights?');
+					}
+				}
+				throw new \Exception(sprintf('Failed to create symbolic link from %s to %s', $originDir, $targetDir));
+			}
+		}
 	}
 }
