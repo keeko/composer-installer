@@ -6,6 +6,8 @@ use Composer\Package\PackageInterface;
 use Composer\Repository\InstalledRepositoryInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
+use Composer\IO\IOInterface;
+use Composer\Composer;
 
 class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 	
