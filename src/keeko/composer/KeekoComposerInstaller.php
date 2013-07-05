@@ -41,35 +41,6 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 		return $folderMappings[$type].'/'.$package->getName();
 	}
 	
-// 	/**
-// 	 * {@inheritDoc}
-// 	 */
-// 	public function install(InstalledRepositoryInterface $repo, PackageInterface $package) {
-// 		$local = $this->getLocalRepositoryPath();
-// 		$installed = false;
-		
-// 		if ($local !== null) {
-// 			$path = $local . DIRECTORY_SEPARATOR . $package->getName();
-// 			if (!$this->filesystem->isAbsolutePath($path)) {
-// 				$path = $this->filesystem->normalizePath(getcwd() . '/' . $path);
-// 			}
-			
-// 			if (file_exists($path)) {
-// 				try {
-// 					$this->symlink($path, $this->getInstallPath($package));
-// 					$installed = true;
-// 				} catch(IOException $e) {
-// 					$installed = false;
-// 				}
-// 			}
-// 		}
-		
-// 		if (!$installed) {
-// 			parent::install($repo, $package);
-// 		}
-// 	}
-	
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -97,14 +68,12 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 			parent::installCode($package);
 		}
 	}
-
-	
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	protected function removeCode(PackageInterface $package) {
-		$path = $this->getInstallPath($initial);
+		$path = $this->getInstallPath($package);
         
 		if (is_link($path)) {
 			unlink($path);
@@ -135,16 +104,6 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 		
 		return null;
 	}
-	
-// 	/**
-// 	 * Returns the root installation path for templates.
-// 	 *
-// 	 * @return string a path relative to the root of the composer.json that is being installed where the templates
-// 	 *         are stored.
-// 	 */
-// 	protected function getTemplateRootPath() {
-// 		return (file_exists ( $this->vendorDir . '/phpdocumentor/phpdocumentor/composer.json' )) ? $this->vendorDir . '/phpdocumentor/phpdocumentor/data/templates' : 'data/templates';
-// 	}
 	
 	/**
 	 * {@inheritDoc}
