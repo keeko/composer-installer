@@ -41,10 +41,39 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 		return $folderMappings[$type].'/'.$package->getName();
 	}
 	
+// 	/**
+// 	 * {@inheritDoc}
+// 	 */
+// 	public function install(InstalledRepositoryInterface $repo, PackageInterface $package) {
+// 		$local = $this->getLocalRepositoryPath();
+// 		$installed = false;
+		
+// 		if ($local !== null) {
+// 			$path = $local . DIRECTORY_SEPARATOR . $package->getName();
+// 			if (!$this->filesystem->isAbsolutePath($path)) {
+// 				$path = $this->filesystem->normalizePath(getcwd() . '/' . $path);
+// 			}
+			
+// 			if (file_exists($path)) {
+// 				try {
+// 					$this->symlink($path, $this->getInstallPath($package));
+// 					$installed = true;
+// 				} catch(IOException $e) {
+// 					$installed = false;
+// 				}
+// 			}
+// 		}
+		
+// 		if (!$installed) {
+// 			parent::install($repo, $package);
+// 		}
+// 	}
+	
+	
 	/**
 	 * {@inheritDoc}
 	 */
-	public function install(InstalledRepositoryInterface $repo, PackageInterface $package) {
+	protected function installCode(PackageInterface $package) {
 		$local = $this->getLocalRepositoryPath();
 		$installed = false;
 		
@@ -65,43 +94,34 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 		}
 		
 		if (!$installed) {
-			parent::install($repo, $package);
+			parent::installCode($package);
 		}
 	}
+
 	
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package) {
-		if (!$repo->hasPackage($package)) {
-            // TODO throw exception again here, when update is fixed and we don't have to remove+install (see #125)
-            return;
-            throw new \InvalidArgumentException('Package is not installed: '.$package);
-        }
+	protected function removeCode(PackageInterface $package) {
+		$path = $this->getInstallPath($initial);
         
-        $path = $this->getInstallPath($initial);
-        
-        if (is_link($path)) {
-        	unlink($path);
-        } else {
-        	parent::uninstall($repo, $package);
-        }
+		if (is_link($path)) {
+			unlink($path);
+		} else {
+			parent::removeCode($package);
+		}
 	}
 
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public function update(InstalledRepositoryInterface $repo, PackageInterface $initial, PackageInterface $target) {
-		if (!$repo->hasPackage($initial)) {
-			throw new \InvalidArgumentException('Package is not installed: '.$initial);
-		}
-		
+	protected function updateCode(PackageInterface $initial, PackageInterface $target) {
 		$path = $this->getInstallPath($initial);
 		
 		if (!is_link($path)) {
-			parent::update($repo, $initial, $target);
+			parent::updateCode($initial, $target);
 		}
 	}
 	
