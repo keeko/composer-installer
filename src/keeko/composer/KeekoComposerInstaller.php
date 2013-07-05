@@ -69,6 +69,27 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 		}
 	}
 	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public function uninstall(InstalledRepositoryInterface $repo, PackageInterface $package) {
+		if (!$repo->hasPackage($package)) {
+            // TODO throw exception again here, when update is fixed and we don't have to remove+install (see #125)
+            return;
+            throw new \InvalidArgumentException('Package is not installed: '.$package);
+        }
+        
+        $path = $this->getInstallPath($initial);
+        
+        if (is_link($path)) {
+        	unlink($path);
+        } else {
+        	parent::uninstall($repo, $package);
+        }
+	}
+
+	
 	/**
 	 * {@inheritDoc}
 	 */
