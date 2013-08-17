@@ -34,7 +34,7 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 			return 'core';
 		}
 
-		return str_replace('keeko-', '', $type) .'/'.$package->getName();
+		return str_replace('keeko-', '', $type) .'s/'.$package->getName();
 	}
 	
 	/**
@@ -42,7 +42,7 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 	 */
 	protected function installCode(PackageInterface $package) {
 		$installPath = $this->getInstallPath($package);
-		$publicDir = $this->filesystem->normalizePath(getcwd() . '/public/_keeko');
+		$publicDir = $this->filesystem->normalizePath('public/_keeko');
 		$local = $this->getLocalRepositoryPath();
 		$installed = false;
 		
@@ -70,7 +70,7 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 		if ($package->getType() !== 'keeko-core') {
 			$packagePublicDir = $this->filesystem->normalizePath($installPath .'/public');
 			
-			if (file_exists($packagePublicDir)) {
+			if (file_exists($packagePublicDir) && file_exists($publicDir)) {
 				$target = $this->filesystem->normalizePath($publicDir . '/' . $package->getName());
 				$this->symlink($packagePublicDir, $target);
 			}
