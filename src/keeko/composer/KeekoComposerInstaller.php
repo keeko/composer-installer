@@ -80,7 +80,7 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 			
 			if (file_exists($packagePublicPath) && file_exists($publicPath)) {
 				$target = $this->filesystem->normalizePath($publicPath . '/' .  $this->getPackageDir($type) . '/' . $package->getName());
-				$this->filesystem->ensureDirectoryExists(basename($target));
+				$this->filesystem->ensureDirectoryExists(dirname($target));
 				$this->symlink($packagePublicPath, $target);
 			}
 		}
@@ -109,15 +109,15 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 			}
 			
 			// remove parent if empty
-			$parent = basename($target);
+			$parent = dirname($target);
 			if (count(scandir($parent)) == 2) {
-				$this->filesystem->removeDirectory($parent);
+				$this->filesystem->removeDirectoryPhp($parent);
 			}
 		}
 	}
 	
 	private function getPublicPath() {
-		return $this->filesystem->normalizePath('public/_keeko');
+		return $this->filesystem->normalizePath(getcwd() . '/public/_keeko');
 	}
 
 	
