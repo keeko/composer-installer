@@ -42,7 +42,7 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 	 */
 	protected function installCode(PackageInterface $package) {
 		$installPath = $this->getInstallPath($package);
-		$publicDir = $this->filesystem->normalizePath('public/_keeko');
+		$publicPath = $this->getPublicPath();
 		$local = $this->getLocalRepositoryPath();
 		$installed = false;
 		
@@ -68,11 +68,11 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 		
 		// symlink package public folder to keeko's public folder 
 		if ($package->getType() !== 'keeko-core') {
-			$packagePublicDir = $this->filesystem->normalizePath($installPath .'/public');
+			$packagePublicPath = $this->filesystem->normalizePath($installPath .'/public');
 			
-			if (file_exists($packagePublicDir) && file_exists($publicDir)) {
-				$target = $this->filesystem->normalizePath($publicDir . '/' . $package->getName());
-				$this->symlink($packagePublicDir, $target);
+			if (file_exists($packagePublicPath) && file_exists($publicPath)) {
+				$target = $this->filesystem->normalizePath($publicPath . '/' . $package->getName());
+				$this->symlink($packagePublicPath, $target);
 			}
 		}
 	}
@@ -81,7 +81,7 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 	 * {@inheritDoc}
 	 */
 	protected function removeCode(PackageInterface $package) {
-		$publicDir = $this->filesystem->normalizePath(getcwd() . '/public/_keeko');
+		$publicPath = $this->getPublicPath();
 		$installPath = $this->getInstallPath($package);
         
 		if (is_link($installPath)) {
@@ -92,12 +92,16 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 		
 		// remove symlink package public folder to keeko's public folder
 		if ($package->getType() !== 'keeko-core') {
-			$target = $this->filesystem->normalizePath($publicDir . '/' . $package->getName());
+			$target = $this->filesystem->normalizePath($publicPath . '/' . $package->getName());
 
 			if (is_link($target)) {
 				unlink($target);
 			}
 		}
+	}
+	
+	private function getPublicPath() {
+		return $this->filesystem->normalizePath('public/_keeko');
 	}
 
 	
