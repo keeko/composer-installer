@@ -12,7 +12,8 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 	private $types = array (
 		'keeko-core',
 		'keeko-app',
-		'keeko-module' 
+		'keeko-module',
+		'keeko-design'
 	);
 	
 	public function __construct(IOInterface $io, Composer $composer, $type = 'library') {
@@ -32,19 +33,16 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 		if ($type === 'keeko-core') {
 			return 'core';
 		}
-		
-		$folderMappings = array(
-			'keeko-app' => 'apps',
-			'keeko-modules' => 'modules'
-		);
-		
-		return $folderMappings[$type].'/'.$package->getName();
+
+		return str_replace('keeko-', '', $type) .'/'.$package->getName();
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	protected function installCode(PackageInterface $package) {
+		$installPath = $this->getInstallPath($package);
+		$publicDir = $this->filesystem->normalizePath(getcwd() . '/public/_keeko');
 		$local = $this->getLocalRepositoryPath();
 		$installed = false;
 		
@@ -56,7 +54,7 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 			
 			if (file_exists($path)) {
 				try {
-					$this->symlink($path, $this->getInstallPath($package));
+					$this->symlink($path, $installPath);
 					$installed = true;
 				} catch(IOException $e) {
 					$installed = false;
@@ -67,18 +65,38 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 		if (!$installed) {
 			parent::installCode($package);
 		}
+		
+		// symlink package public folder to keeko's public folder 
+		if ($package->getType() !== 'keeko-core') {
+			$packagePublicDir = $this->filesystem->normalizePath($installPath .'/public');
+			
+			if (file_exists($packagePublicDir)) {
+				$target = $this->filesystem->normalizePath($publicDir . '/' . $package->getName());
+				$this->symlink($packagePublicDir, $target);
+			}
+		}
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	protected function removeCode(PackageInterface $package) {
-		$path = $this->getInstallPath($package);
+		$publicDir = $this->filesystem->normalizePath(getcwd() . '/public/_keeko');
+		$installPath = $this->getInstallPath($package);
         
-		if (is_link($path)) {
-			unlink($path);
+		if (is_link($installPath)) {
+			unlink($installPath);
 		} else {
 			parent::removeCode($package);
+		}
+		
+		// remove symlink package public folder to keeko's public folder
+		if ($package->getType() !== 'keeko-core') {
+			$target = $this->filesystem->normalizePath($publicDir . '/' . $package->getName());
+
+			if (is_link($target)) {
+				unlink($target);
+			}
 		}
 	}
 
