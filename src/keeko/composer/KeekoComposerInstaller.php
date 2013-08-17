@@ -74,6 +74,9 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 		$type = $package->getType(); 
 		if ($type !== 'keeko-core') {
 			$packagePublicPath = $this->filesystem->normalizePath($installPath .'/public');
+			if (!$this->filesystem->isAbsolutePath($packagePublicPath)) {
+				$packagePublicPath = $this->filesystem->normalizePath(getcwd() . '/' . $packagePublicPath);
+			}
 			
 			if (file_exists($packagePublicPath) && file_exists($publicPath)) {
 				$target = $this->filesystem->normalizePath($publicPath . '/' .  $this->getPackageDir($type) . '/' . $package->getName());
@@ -108,7 +111,7 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 			// remove parent if empty
 			$parent = basename($target);
 			if (count(scandir($parent)) == 2) {
-				$this->filesystem->removeDirectory($path);
+				$this->filesystem->removeDirectory($parent);
 			}
 		}
 	}
