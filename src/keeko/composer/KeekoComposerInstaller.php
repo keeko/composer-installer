@@ -110,7 +110,7 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 			
 			// remove parent if empty
 			$parent = dirname($target);
-			if (count(scandir($parent)) == 2) {
+			if (file_exists($parent) && count(scandir($parent)) == 2) {
 				$this->filesystem->removeDirectoryPhp($parent);
 			}
 		}
