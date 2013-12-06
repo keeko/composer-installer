@@ -1,17 +1,16 @@
 {
 	"name" : "keeko/composer-installer",
 	"description" : "Keeko component installer",
-	"type" : "composer-installer",
+	"type" : "composer-plugin",
 	"authors" : [{
 			"name" : "gossi",
 			"homepage" : "http://gos.si"
 		}
 	],
-	"license" : [
-		"MIT"
-	],
+	"license" : "MIT",
 	"require" : {
-		"php" : ">=5.4"
+		"php" : ">=5.4",
+		"composer-plugin-api" : "1.0.0"
 	},
 	"require-dev" : {
 		"composer/composer" : "master-dev"
@@ -22,6 +21,6 @@
 		}
 	},
 	"extra" : {
-		"class" : "\\keeko\\composer\\KeekoComposerInstaller"
+		"class" : "\\keeko\\composer\\KeekoComposerPlugin"
 	}
 }
