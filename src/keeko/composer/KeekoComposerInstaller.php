@@ -60,7 +60,7 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 				try {
 					$this->symlink($path, $installPath);
 					$installed = true;
-				} catch(IOException $e) {
+				} catch (\Exception $e) {
 					$installed = false;
 				}
 			}
