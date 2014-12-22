@@ -1,13 +1,13 @@
 <?php
-
 namespace keeko\composer;
 
 use Composer\Package\PackageInterface;
 use Composer\Repository\InstalledRepositoryInterface;
 use Composer\IO\IOInterface;
 use Composer\Composer;
+use Composer\Installer\LibraryInstaller;
 
-class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
+class KeekoComposerInstaller extends LibraryInstaller {
 	
 	private $types = array (
 		'keeko-core',
@@ -117,7 +117,9 @@ class KeekoComposerInstaller extends \Composer\Installer\LibraryInstaller {
 	}
 	
 	private function getPublicPath() {
-		return $this->filesystem->normalizePath(getcwd() . '/public/_keeko');
+		$path = $this->filesystem->normalizePath(getcwd() . '/public/_keeko');
+		$this->filesystem->ensureDirectoryExists($path);
+		return $path;
 	}
 
 	
