@@ -1,9 +1,9 @@
 <?php
 namespace keeko\composer;
 
-use Composer\Plugin\PluginInterface;
-use Composer\IO\IOInterface;
 use Composer\Composer;
+use Composer\IO\IOInterface;
+use Composer\Plugin\PluginInterface;
 
 class KeekoComposerPlugin implements PluginInterface {
 	
