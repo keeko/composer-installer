@@ -13,7 +13,7 @@ class KeekoComposerInstaller extends LibraryInstaller {
 	private $root;
 	
 	/** @var array */
-	private $types = ['keeko-core', 'keeko-app', 'keeko-module', 'keeko-design'];
+	private $types = ['keeko-framework', 'keeko-app', 'keeko-module', 'keeko-design'];
 	
 	public function __construct(IOInterface $io, Composer $composer, $type = 'library') {
 		parent::__construct($io, $composer, $type);
