@@ -2,23 +2,23 @@
 	"name" : "keeko/composer-installer",
 	"description" : "Keeko component installer",
 	"type" : "composer-plugin",
+	"license" : "MIT",
 	"authors" : [{
-			"name" : "gossi",
+			"name" : "Thomas Gossmann",
 			"homepage" : "http://gos.si"
 		}
 	],
-	"license" : "MIT",
+	"autoload" : {
+		"psr-4" : {
+			"keeko\\composer\\" : "src"
+		}
+	},
 	"require" : {
 		"php" : ">=5.4",
 		"composer-plugin-api" : "^1.0"
 	},
 	"require-dev" : {
-		"composer/composer" : "master-dev"
-	},
-	"autoload" : {
-		"psr-4" : {
-			"keeko\\composer\\" : "src"
-		}
+		"composer/composer" : "^1"
 	},
 	"extra" : {
 		"class" : "\\keeko\\composer\\KeekoComposerPlugin"
